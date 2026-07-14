@@ -1,0 +1,50 @@
+<!-- Body Wrapper -->
+<div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
+  data-sidebar-position="fixed" data-header-position="fixed">
+
+  <!-- Main wrapper -->
+  <div class="body-wrapper">
+    <div class="container-fluid">
+      <div class="container mt-4" *ngIf="commande">
+
+        <h3>Détails commande #{{commande.id}}</h3>
+
+        <!-- Informations client -->
+        <div class="card p-3 mb-3 shadow-sm">
+          <h5>Informations client</h5>
+          <p><strong>Nom :</strong> {{commande.nomClient}} {{commande.prenomClient}}</p>
+          <p><strong>Adresse :</strong> {{commande.adresseClient}}</p>
+          <p><strong>Téléphone :</strong> {{commande.telephoneClient}}</p>
+          <p><strong>Statut :</strong> 
+            <span class="badge bg-info text-dark">{{commande.statutCommande}}</span>
+          </p>
+        </div>
+
+        <!-- Produits commandés -->
+        <div class="card p-3 mb-3 shadow-sm">
+          <h5>Produits commandés</h5>
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <thead class="table-light">
+                <tr>
+                  <th>Produit</th>
+                  <th>Quantité</th>
+                  <th>Prix Unitaire</th>
+                  <th>Sous Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let ligne of commande.lignesCommande">
+                  <td>{{ligne.produit.nomProduit}}</td>
+                  <td>{{ligne.quantiteAchete}}</td>
+                  <td>{{ligne.produit.prixUnitaire }}</td>
+                  <td>{{ (ligne.quantiteAchete * ligne.produit.prixUnitaire) }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div> <!-- Fin container commande -->
+    </div> <!-- Fin container-fluid -->
+  </div> <!-- Fin body-wrapper -->
+</div> <!-- Fin page-wrapper -->

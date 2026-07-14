@@ -1,0 +1,65 @@
+<!-- Sidebar Start -->
+<aside class="left-sidebar d-flex flex-column" [class.collapsed]="isCollapsed">
+  <!-- En-tête avec logo et bouton de pliage -->
+  <div>
+    <div class="brand-logo d-flex align-items-center justify-content-between">
+      <a href="./index.html" class="text-nowrap logo-img">
+        <img src="../assets/images/logos/dark-logo.svg" width="180" alt="" />
+      </a>
+    </div>
+    
+    <!-- BOUTON POUR PLIER/DEPLIER -->
+    <div class="toggle-sidebar-btn text-center py-2" (click)="toggleSidebar()">
+      <i class="ti" [ngClass]="isCollapsed ? 'ti-menu-2' : 'ti-chevron-left'"></i>
+    </div>
+  </div>
+
+  <!-- Conteneur de navigation qui prend tout l'espace restant -->
+  <div class="sidebar-nav-wrapper flex-grow-1">
+    <nav class="sidebar-nav scroll-sidebar" data-simplebar="">
+      <ul id="sidebarnav">
+        <li class="nav-small-cap">
+          <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+          <span class="hide-menu" *ngIf="!isCollapsed">Home</span>
+        </li>
+        <li class="sidebar-item">
+          <a class="sidebar-link" routerLink="" aria-expanded="false">
+            <span><i class="ti ti-layout-dashboard"></i></span>
+            <span class="hide-menu" *ngIf="!isCollapsed">Tableau De Bord</span>
+          </a>
+        </li>
+        <li class="nav-small-cap">
+          <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+          <span class="hide-menu" *ngIf="!isCollapsed">Activités</span>
+        </li>
+        <li class="sidebar-item">
+          <a class="sidebar-link" routerLink="/categorie" aria-expanded="false">
+            <span><i class="ti ti-article"></i></span>
+            <span class="hide-menu" *ngIf="!isCollapsed">Categories de produits</span>
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a class="sidebar-link" routerLink="/produit" aria-expanded="false">
+            <span><i class="ti ti-alert-circle"></i></span>
+            <span class="hide-menu" *ngIf="!isCollapsed">Liste des produits</span>
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a class="sidebar-link" routerLink="/commande" aria-expanded="false">
+            <span><i class="ti ti-cards"></i></span>
+            <span class="hide-menu" *ngIf="!isCollapsed">Commandes</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+
+  <!-- Bouton de déconnexion en bas -->
+  <div class="logout-container p-3">
+    <a class="logout-link d-flex align-items-center" (click)="logout()"  style="cursor: pointer;">
+      <i class="ti ti-logout fs-5 me-2"></i>
+      <span class="hide-menu" *ngIf="!isCollapsed">Déconnexion</span>
+    </a>
+  </div>
+</aside>
+<!-- Sidebar End -->

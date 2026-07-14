@@ -1,0 +1,185 @@
+<!--  Body Wrapper -->
+<div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
+  data-sidebar-position="fixed" data-header-position="fixed">
+  <!--  Main wrapper -->
+  <div class="body-wrapper">
+
+    <div class="container-fluid">
+
+      <!-- Formulaire pour ajouter un produit -->
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-body p-4">
+              <h5 class="card-title fw-semibold mb-4">{{ isEditing ? 'Modifier' : 'Ajouter' }} un produit</h5>
+              
+              <form (ngSubmit)="onSubmit()" #produitForm="ngForm" enctype="multipart/form-data">
+                <div class="row">
+                  <!-- Nom du produit -->
+                  <div class="col-md-6 mb-3">
+                    <label for="nomProduit" class="form-label fw-semibold">Nom du produit <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="nomProduit" name="nomProduit" 
+                           [(ngModel)]="produit.nomProduit"
+                           placeholder="Ex: Smartphone, T-shirt, Chaise..." required>
+                  </div>
+
+                  <!-- Catégorie (categorieId) -->
+                  <div class="col-md-6 mb-3">
+                    <label for="categorieId" class="form-label fw-semibold">Catégorie <span class="text-danger">*</span></label>
+                    <select class="form-select" id="categorieId" name="categorieId" 
+                            [(ngModel)]="produit.categorieId" required>
+                      <option value="" selected disabled>Sélectionnez une catégorie</option>
+                      <option *ngFor="let cat of categories" [value]="cat.id">{{ cat.nomCategorie }}</option>
+                    </select>
+                  </div>
+
+                  <!-- Description -->
+                  <div class="col-12 mb-3">
+                    <label for="description" class="form-label fw-semibold">Description</label>
+                    <textarea class="form-control" id="description" name="description" rows="3" 
+                              [(ngModel)]="produit.description"
+                              placeholder="Description détaillée du produit..."></textarea>
+                  </div>
+
+                  <!-- Prix unitaire -->
+                  <div class="col-md-4 mb-3">
+                    <label for="prixUnitaire" class="form-label fw-semibold">Prix unitaire (€) <span class="text-danger">*</span></label>
+                    <div class="input-group">
+                      <span class="input-group-text">€</span>
+                      <input type="number" class="form-control" id="prixUnitaire" name="prixUnitaire" 
+                             [(ngModel)]="produit.prixUnitaire"
+                             min="0" step="0.01" placeholder="0.00" required>
+                    </div>
+                  </div>
+
+                  <!-- Stock -->
+                  <div class="col-md-4 mb-3">
+                    <label for="stock" class="form-label fw-semibold">Stock <span class="text-danger">*</span></label>
+                    <input type="number" class="form-control" id="stock" name="stock" 
+                           [(ngModel)]="produit.stock"
+                           min="0" step="1" placeholder="0" required>
+                  </div>
+
+                  <!-- Photo du produit -->
+                  <div class="col-md-4 mb-3">
+                    <label for="photoProduit" class="form-label fw-semibold">Photo du produit</label>
+                    <input type="file" class="form-control" id="photoProduit" name="photoProduit" 
+                           (change)="onFileSelected($event)"
+                           accept="image/*">
+                    <small class="text-muted">Formats: JPG, PNG (max 2MB)</small>
+                  </div>
+
+                  <!-- Boutons d'action -->
+                  <div class="col-12 mt-3">
+                    <button type="submit" class="btn btn-primary" [disabled]="!produit.nomProduit || !produit.categorieId || !produit.prixUnitaire || !produit.stock">
+                      <i class="ti ti-plus me-2"></i>{{ isEditing ? 'Modifier' : 'Ajouter' }} le produit
+                    </button>
+                    <button type="button" class="btn btn-outline-secondary ms-2" (click)="resetForm()">
+                      <i class="ti ti-refresh me-2"></i>Réinitialiser
+                    </button>
+                    <button type="button" class="btn btn-secondary ms-2" *ngIf="isEditing" (click)="resetForm()">
+                      <i class="ti ti-x me-2"></i>Annuler
+                    </button>
+                  </div>
+                </div>
+              </form>
+
+              <!-- Liste des produits existants (aperçu) -->
+              <div class="mt-5">
+                <h6 class="fw-semibold mb-3">Produits récents</h6>
+                <div class="table-responsive">
+                  <table class="table table-bordered align-middle">
+                    <thead class="table-light">
+                      <tr>
+                        <th>Photo</th>
+                        <th>Nom</th>
+                        <th>Catégorie</th>
+                        <th>Prix (FCFA)</th>
+                        <th>Stock</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <!-- Application du slice pour n'afficher que les éléments de la page active -->
+                      <tr *ngFor="let produit of produits | slice: (currentPage * pageSize) : ((currentPage + 1) * pageSize)">
+                        <td class="text-center">
+                          <img *ngIf="produit.photoProduit" 
+                              [src]="imageBaseUrl + produit.photoProduit" 
+                              alt="{{ produit.nomProduit }}"
+                              class="img-thumbnail"
+                              style="width: 40px; height: 40px; object-fit: cover;">
+                          <span *ngIf="!produit.photoProduit" class="text-muted small">
+                            <i class="ti ti-photo"></i>
+                          </span>
+                        </td>
+                        <td>{{ produit.nomProduit }}</td>
+                        <td>{{ getCategorieName(produit.categorieId) }}</td>
+                        <td>{{ produit.prixUnitaire}}</td>
+                        <td>
+                          <span class="badge" [ngClass]="produit.stock > 5 ? 'bg-light-success text-success' : 'bg-light-danger text-danger'">
+                            {{ produit.stock }}
+                          </span>
+                        </td>
+                        <td>
+                          <button class="btn btn-sm btn-outline-primary me-2" (click)="editProduit(produit)">
+                            <i class="ti ti-edit"></i>
+                          </button>
+                          <button class="btn btn-sm btn-outline-danger" (click)="deleteProduit(produit.id)">
+                            <i class="ti ti-trash"></i>
+                          </button>
+                        </td>
+                      </tr>
+                      <tr *ngIf="produits.length === 0">
+                        <td colspan="6" class="text-center text-muted">Aucun produit trouvé</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <!-- CONTRÔLES DE PAGINATION (Logique exclusive demandée) -->
+                <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mt-4 border-top pt-3" *ngIf="produits.length > 0">
+                  <div>
+                    <span class="text-muted small">
+                      Affichage de <strong>{{ getStartIndex() }}</strong> à <strong>{{ getEndIndex() }}</strong> 
+                      sur <strong>{{ totalElements }}</strong> produits
+                    </span>
+                  </div>
+
+                  <div class="d-flex align-items-center gap-3">
+                    <select class="form-select form-select-sm" style="width: auto;" [(ngModel)]="pageSize" (change)="onPageSizeChange()">
+                      <option [value]="5">5</option>
+                      <option [value]="10">10</option>
+                      <option [value]="20">20</option>
+                    </select>
+
+                    <nav>
+                      <ul class="pagination pagination-sm mb-0">
+                        <li class="page-item" [class.disabled]="currentPage === 0">
+                          <button class="page-link" (click)="goToPage(0)">««</button>
+                        </li>
+                        <li class="page-item" [class.disabled]="currentPage === 0">
+                          <button class="page-link" (click)="previousPage()">«</button>
+                        </li>
+                        <li class="page-item" *ngFor="let page of getPages()" [class.active]="page === currentPage">
+                          <button class="page-link" (click)="goToPage(page)">{{ page + 1 }}</button>
+                        </li>
+                        <li class="page-item" [class.disabled]="currentPage === getTotalPages() - 1">
+                          <button class="page-link" (click)="nextPage()">»</button>
+                        </li>
+                        <li class="page-item" [class.disabled]="currentPage === getTotalPages() - 1">
+                          <button class="page-link" (click)="goToLastPage()">»»</button>
+                        </li>
+                      </ul>
+                    </nav>
+                  </div>
+                </div>
+              </div>
+
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

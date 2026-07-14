@@ -1,4 +1,4 @@
-name: Electronic Frontend Pipeline .
+name: Electronic Frontend Pipeline 
 
 on:
   push:

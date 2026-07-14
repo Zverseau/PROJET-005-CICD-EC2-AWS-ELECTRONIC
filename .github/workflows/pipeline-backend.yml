@@ -1,4 +1,4 @@
-name: Electronic Backend API Pipeline
+name: Electronic Backend API Pipeline.
 
 on:
   push:

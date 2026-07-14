@@ -9,7 +9,7 @@ import { Commande } from '../model/commande';
 })
 export class CommandeService {
 
-private apiUrl = `${environment.apiUrl}/api/v1/commandes`;
+private apiUrl = `${environment.apiUrl}/v1/commandes`;
 
   constructor(private http: HttpClient) { }
 
@@ -19,11 +19,11 @@ private apiUrl = `${environment.apiUrl}/api/v1/commandes`;
   getCommandesAttente(): Observable<Commande[]> {
       return this.http.get<Commande[]>(`${this.apiUrl}/en-attente`);
     }
-  
+
   getCommandeById(id: string): Observable<any> {
       return this.http.get<any>(`${this.apiUrl}/getById/${id}`);
     }
-  
+
   createCommande(formData: FormData): Observable<any> {
       return this.http.post<any>(`${this.apiUrl}/commander`, formData);
     }
@@ -32,5 +32,5 @@ private apiUrl = `${environment.apiUrl}/api/v1/commandes`;
   const formData = new FormData();
   formData.append('statut', statut);
   return this.http.put<Commande>(`${this.apiUrl}/${id}`, formData); }
-  
+
 }

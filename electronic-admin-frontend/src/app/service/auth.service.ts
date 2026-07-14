@@ -8,7 +8,7 @@ import { environment } from '../../environment/environment';
   providedIn: 'root'
 })
 export class AuthService {
-   private apiUrl = `${environment.apiUrl}/api/v1/authentification`;
+   private apiUrl = `${environment.apiUrl}/v1/authentification`;
   private tokenKey = 'auth_token';
   //private adminIdKey = 'admin_id';
 
@@ -49,7 +49,7 @@ setToken(token: string): void {
    // localStorage.removeItem(this.adminIdKey);
   }
 
-  isAuthenticated(): boolean { 
+  isAuthenticated(): boolean {
     return !!this.getToken();
   }
 }

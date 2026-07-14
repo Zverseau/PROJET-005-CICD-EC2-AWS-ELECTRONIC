@@ -9,12 +9,12 @@ import { Statistiques } from '../model/statistiques';
 })
 export class StatistiquesService {
 
-private apiUrl = `${environment.apiUrl}/api/v1/statistiques`;
+private apiUrl = `${environment.apiUrl}/v1/statistiques`;
 
   constructor(private http: HttpClient) { }
 
 getStatistiques(): Observable<Statistiques> {
     return this.http.get<Statistiques>(`${this.apiUrl}/dashboard`);
   }
- 
+
 }

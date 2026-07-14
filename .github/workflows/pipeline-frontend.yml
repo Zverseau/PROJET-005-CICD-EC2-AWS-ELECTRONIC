@@ -1,4 +1,4 @@
-name: Electronic Frontend Pipeline.
+name: Electronic Frontend Pipeline
 
 on:
   push:
@@ -47,14 +47,15 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Debug secrets (safe)
+        env:
+          VPS_IP: ${{ secrets.VPS_IP }}
+          VPS_USERNAME: ${{ secrets.VPS_USERNAME }}
+          VPS_SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
+
         run: |
           echo "VPS_IP length: ${#VPS_IP}"
           echo "VPS_USERNAME length: ${#VPS_USERNAME}"
           echo "VPS_SSH_KEY length: ${#VPS_SSH_KEY}"
-          env:
-            VPS_IP: ${{ secrets.VPS_IP }}
-            VPS_USERNAME: ${{ secrets.VPS_USERNAME }}
-            VPS_SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
 
       - name: Setup SSH
         run: |

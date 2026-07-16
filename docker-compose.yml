@@ -4,9 +4,11 @@ services:
     image: mysql:8
     container_name: electronic_db
     restart: always
+    env_file:
+      - .env
     environment:
-      MYSQL_ROOT_PASSWORD: z_verseau@1234
-      MYSQL_DATABASE: electronic_db
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
     ports:
       - "3307:3306"
     volumes:
@@ -25,6 +27,17 @@ services:
     image: zbestleboss/electronic_backend
     container_name: electronicbackend
     restart: always
+
+    env_file:
+      - .env
+
+    environment:
+      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
+      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+      APP_SECRET_KEY: ${APP_SECRET_KEY}
+      APP_EXPIRATION_TIME: ${APP_EXPIRATION_TIME}
+
     ports:
       - "8080:8080"
     depends_on:

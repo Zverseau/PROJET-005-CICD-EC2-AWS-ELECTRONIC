@@ -63,6 +63,12 @@ jobs:
           distribution: 'temurin'
 
       - name: Run Unit Tests
+        env:
+          MYSQL_DATABASE: electronic_db
+          SPRING_DATASOURCE_USERNAME: root
+          SPRING_DATASOURCE_PASSWORD: root
+          APP_SECRET_KEY: testSecretKeyForCIOnly1234567890
+          APP_EXPIRATION_TIME: 86400000
         run: |
           cd electronic_backend
           chmod +x mvnw
